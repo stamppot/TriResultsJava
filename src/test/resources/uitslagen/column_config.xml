@@ -1,0 +1,309 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<columns>
+  <column>
+    <name order="1">Pos</name>
+    <mapfrom>
+      <altname>Plts</altname>
+      <altname>Pl</altname>
+      <altname>Nr</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="2">StartNr</name>
+    <mapfrom>
+      <altname>StNr</altname>
+      <altname>RaceNr</altname>
+      <altname>#Bib</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="3">Naam</name>
+    <mapfrom>
+      <altname>Name</altname>
+      <altname>NAAM</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="4">Club</name>
+    <mapfrom>
+      <altname>Team</altname>
+      <altname>Teamnaam</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="4">City</name>
+    <mapfrom>
+      <altname>Woonplaats</altname>
+      <altname>Club/Woonplaats</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="5">PosCat</name>
+    <mapfrom>
+      <altname>CatPts</altname>
+      <altname>PltsCat</altname>
+      <altname>#Cat</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="6">Cat</name>
+    <mapfrom>
+      <altname>Categ</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="7">Swim</name>
+    <mapfrom>
+      <altname>Zwem</altname>
+      <altname>Zwemmen</altname>
+      <altname>ZwemTijd</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="9">SwimPace</name>
+    <mapfrom>    </mapfrom>
+  </column>
+  <column>
+    <name order="8">PosSwim</name>
+    <mapfrom>
+      <altname>#Swim</altname>
+      <altname>PltsZwem</altname>
+      <altname>PltsZw</altname>
+      <altname>#Zwem</altname>
+      <altname>#Z</altname>
+      <altname>#Zw</altname>
+      <altname>#Sw</altname>
+      <altname>#S</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="10">T1</name>
+    <mapfrom>
+      <altname>Wis1</altname>
+      <altname>Wiss1</altname>
+      <altname>Wissel1</altname>
+      <altname>Chg1</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="11">PosT1</name>
+    <mapfrom>
+      <altname>#T1</altname>
+      <altname>#W1</altname>
+      <altname>PosWis1</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="12">PosAfterT1</name>
+    <mapfrom>
+      <altname>#AfterT1</altname>
+      <altname>#NaW1</altname>
+      <altname>PosNaWis1</altname>
+      <!--<altname>AftChg1</altname>-->
+    </mapfrom>
+  </column>
+  <column>
+    <name order="13">Bike</name>
+    <mapfrom>
+      <altname>Fiets</altname>
+      <altname>Fietsen</altname>
+      <altname>FietsTijd</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="15">BikePace</name>
+    <mapfrom>
+      <altname>km/u</altname>
+      <altname>km/h</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="14">PosBike</name>
+    <mapfrom>
+      <altname>#Bike</altname>
+      <altname>PltsFiets</altname>
+      <altname>PltsFie</altname>
+      <altname>#Fiets</altname>
+      <altname>#F</altname>
+      <altname>#Fie</altname>
+      <altname>#Bk</altname>
+      <altname>#B</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="16">AfterBike</name>
+    <mapfrom>
+      <altname>NaFiets</altname>
+      <altname>NaF</altname>
+      <altname>NaFie</altname>
+      <altname>AftBike</altname>
+      <altname>AftBk</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="17">PosAfterBike</name>
+    <mapfrom>
+      <altname>#AfterBike</altname>
+      <altname>PltsNaFiets</altname>
+      <altname>PltsNaFie</altname>
+      <altname>#NaFiets</altname>
+      <altname>#NaF</altname>
+      <altname>#NaFie</altname>
+      <altname>#AftBk</altname>
+      <altname>#aftB</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="18">T2</name>
+    <mapfrom>
+      <altname>Wis2</altname>
+      <altname>Wiss2</altname>
+      <altname>Wissel2</altname>
+      <altname>Chg2</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="19">PosT2</name>
+    <mapfrom>
+      <altname>#T2</altname>
+      <altname>#W2</altname>
+      <altname>PosWis2</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="20">PosAfterT2</name>
+    <mapfrom>
+      <altname>#AfterT2</altname>
+      <altname>#NaW2</altname>
+      <altname>PosNaWis2</altname>
+      <!--<altname>AftChg2</altname>-->
+    </mapfrom>
+  </column>
+  <column>
+    <name order="21">Run</name>
+    <mapfrom>
+      <altname>Loop</altname>
+      <altname>Lopen</altname>
+      <altname>LoopTijd</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="23">RunPace</name>
+    <mapfrom>    </mapfrom>
+  </column>
+  <column>
+    <name order="22">PosRun</name>
+    <mapfrom>
+      <altname>#Run</altname>
+      <altname>PltsLoop</altname>
+      <altname>PltsRun</altname>
+      <altname>#Loop</altname>
+      <altname>#L</altname>
+      <altname>#R</altname>
+    </mapfrom>
+  </column>
+  <!-- RBR -->
+  <column>
+    <name order="26">TeamNr</name>
+    <mapfrom>
+      <altname>TeamNo</altname>
+      <altname>TeamNumber</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="28">TeamTotal</name>
+    <mapfrom>
+      <altname>TeamTotaal</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="7">Run1</name>
+    <mapfrom>
+      <altname>Loop1</altname>
+      <altname>L1</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="8">PosRun1</name>
+    <mapfrom>
+      <altname>#Loop1</altname>
+      <altname>#L1</altname>
+      <altname>PltsLoop1</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="21">Run2</name>
+    <mapfrom>
+      <altname>Loop2</altname>
+      <altname>L2</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="22">PosRun2</name>
+    <mapfrom>
+      <altname>#Loop2</altname>
+      <altname>#L2</altname>
+      <altname>PltsLoop2</altname>
+    </mapfrom>
+  </column>
+  <!-- end RBR -->
+  <!-- Teams -->
+  <column>
+    <name order="25">TeamPoints</name>
+    <mapfrom>
+      <altname>Pnt</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="27">TeamTotalPoints</name>
+    <mapfrom>
+      <altname>Punten</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="29">TeamRank</name>
+    <mapfrom>
+      <altname>TeamPos</altname>
+      <altname>RankTeam</altname>
+    </mapfrom>
+  </column>
+  <!-- end Teams -->
+  <column>
+    <name order="31">Difference</name>
+    <mapfrom>
+      <altname>Achter</altname>
+      <altname>Verschil</altname>
+      <altname>Versch</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="30">Total</name>
+    <mapfrom>
+      <altname>Totaal</altname>
+      <altname>TotaalTijd</altname>
+      <altname>Totaaltijd</altname>
+      <altname>Eindtijd</altname>
+      <altname>NETTO</altname>
+      <altname>Netto</altname>
+      <altname>NettoTijd</altname>
+      <altname>FinishTijd</altname>
+      <altname>Finish</altname>
+      <altname>Tijd</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="32">Race</name>
+    <mapfrom>
+      <altname>RaceName</altname>
+      <altname>Event</altname>
+      <altname>race</altname>
+    </mapfrom>
+  </column>
+  <column>
+    <name order="33">RaceDate</name>
+    <mapfrom>
+      <altname>Date</altname>
+      <altname>date</altname>
+    </mapfrom>
+  </column>
+</columns>

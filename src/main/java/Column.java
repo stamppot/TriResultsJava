@@ -1,21 +1,23 @@
 package TriResultsJava;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public class Column {
 
     private String name;
     private int order;
 
+    private String shortName;
+
     private List<String> alternativeNames;
 
-    public Column(String name, int order, List<String> alternativeNames) {
+    public Column(String name, String shortName, int order, List<String> alternativeNames) {
         this.name = name;
         this.order = order;
-
+        if(shortName != null && !shortName.equals("")) {
+            this.shortName = shortName;
+        }
         this.alternativeNames = alternativeNames;
     }
 
@@ -27,6 +29,16 @@ public class Column {
     public void setName(String name) {
         this.name = name;
     }
+
+    public final String getShortName()
+    {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
+    }
+
 
     public int getOrder() {
         return this.order;

@@ -1,8 +1,8 @@
-PosCat,StNr,Totaal,Name Vorname,Cat,Jaar,Club,Nationality,Swim,PosSwim,Bike,PosBike,AftBike,PosAftBike,Run,PosRun,Total,Pos
+PosCat,StNr,Totaal,Naam,Cat,Jaar,Club,Nationality,Swim,PosSwim,Bike,PosBike,AftBike,PosAftBike,Run,PosRun,Total,Pos
 2,527,04:17:26,Edwin Dasselaar,TM-25,1992,GSTV Tritanium,NED,00:30:03,4,02:21:10,3,02:51:13,3,01:26:12,2,04:17:26,2
-3,531,04:22:20,Bram Smit,TM-25,1993,GSTV Tritanium,NED,00:30:15,5,02:18:41,2,02:48:56,2,,01:33:23,3,04:22:20,4
+3,531,04:22:20,Bram Smit,TM-25,1993,GSTV Tritanium,NED,00:30:15,5,02:18:41,2,02:48:56,2,01:33:23,3,04:22:20,4
 3,549,04:44:46,Wouter Visch,TM-30,1984,GVAV Triathlon Groningen,NED,00:36:33,10,02:30:00,4,03:06:34,4,01:38:11,3,04:44:46,16
 4,547,04:48:18,Sam Kamminga,TM-30,1988,GVAV Triathlon Groningen,NED,00:36:06,8,02:27:53,3,03:03:59,3,01:44:19,7,04:48:18,21
-4,583,04:52:41,Jens Rasmussen,TM-40,1978,GSTV Tritanium,DEN,00:32:40,6,02:25:29,1,02:58:09,1,01:54:31,12,04:52:41,25
-2,502,05:21:21,Margot Reinders,TW-20,1995,GSTV Tritanium,NED,00:37:21,4,02:52:22,1,03:29:43,3,01:51:37,2,05:21:21,6,
-5,518,05:49:08,David Van Eekhout,TM-20,1994,GSTV Tritanium,NED,00:32:00,4,02:43:36,3,03:15:37,3,02:33:30,9,05:49:08,119
+4,583,04:52:41,Jens Rasmussen,TM-40,1978,GSTV Tritanium,DEN,00:32:40,6,02:25:29,1,02:58:09,1,01:54:31,12,04:52:41,25
+2,502,05:21:21,Margot Reinders,TW-20,1995,GSTV Tritanium,NED,00:37:21,4,02:52:22,1,03:29:43,3,01:51:37,2,05:21:21,6
+5,518,05:49:08,David van Eekhout,TM-20,1994,GSTV Tritanium,NED,00:32:00,4,02:43:36,3,03:15:37,3,02:33:30,9,05:49:08,119

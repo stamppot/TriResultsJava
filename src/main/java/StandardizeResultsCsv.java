@@ -7,48 +7,37 @@ import java.util.stream.Collectors;
 
 public class StandardizeResultsCsv {
 
-    private List<Column> _csvColumnConfig;
+//    private List<Column> _csvColumnConfig;
 
-    private String _csvColumnConfixXml;
     private ICsvValidator csvValidator;
+    private ColumnStandardizer columnStandardizer;
 
-    public StandardizeResultsCsv(String columnConfigXml) {
-        this._csvColumnConfixXml = columnConfigXml;
-    }
 
-    public StandardizeResultsCsv(List<Column> columnsConfig, ICsvValidator csvValidator) {
+    public StandardizeResultsCsv(/*List<Column> columnsConfig, */ ICsvValidator csvValidator, ColumnStandardizer columnStandardizer) {
 
-        this._csvColumnConfig = columnsConfig;
+//        this._csvColumnConfig = columnsConfig;
         this.csvValidator = csvValidator;
+        this.columnStandardizer = columnStandardizer;
     }
 
-    public final List<List<String>> FilterOnName(String[] csvLines, List<String> memberNames) {
-        List<String> standardizedLines = Arrays.asList(ReadAndStandardize(csvLines));
-        String headerLine = standardizedLines.get(0);
-        String separator = new MyCsvHelper().determineSeparator(headerLine);
-        final String delimiter = separator;
-
-        List<List<String>> csvValues = standardizedLines.stream()
-                .map(line -> Arrays.asList(line.split(delimiter)))
-                .collect(Collectors.toList());
-
-//        csvValues = ReadAndStandardize(csvValues);
+    public final List<List<String>> FilterOnName(String[] csvLines, Map<String,String> memberNames) {
+        List<List<String>> csvValues = ReadAndStandardize(csvLines);
 
         return FilterOnName(csvValues, memberNames);
     }
 
 
-    public final List<List<String>> FilterOnName(List<List<String>> csvLines, List<String> memberNames) {
-        List<List<String>> standardizedResultLines = csvLines; // ReadAndStandardize(csvLines);
+    public final List<List<String>> FilterOnName(List<List<String>> csvLines, Map<String, String>  memberNames) {
+        List<List<String>> standardizedResultLines = csvLines;
 
 //        /* validate csv with business rules */
-        if(!csvValidator.isValid( standardizedResultLines)) {
+        if (!csvValidator.isValid(standardizedResultLines)) {
             String errorMsg = "CSV error: " + String.join(",", csvValidator.getErrors());
             System.out.println(errorMsg);
 //            throw new RuntimeException(errorMsg);
         }
 
-        if(standardizedResultLines.size() == 0) {
+        if (standardizedResultLines.size() == 0) {
             System.out.println("FilterOnName: No csvLines");
         }
         List<String> headers = standardizedResultLines.get(0);
@@ -56,15 +45,16 @@ public class StandardizeResultsCsv {
         /* find index of Name header */
         int nameIndex = headers.indexOf("Naam");
 
-        Map<String, String> memberMap = memberNames.stream().collect(Collectors.toMap(Function.identity(), Function.identity()));
         List<List<String>> filteredResults = new ArrayList<>();
+        filteredResults.add(headers);
 
         for (List<String> currLine : standardizedResultLines) {  // start after headers
             List<String> columnValues = new ArrayList<>();
+
             String name = currLine.get(nameIndex);
 
             /* skip to next if name is not in list */
-            if (!memberMap.containsKey(name.trim())) {
+            if (!memberNames.containsKey(name.trim())) {
                 continue;
             } else {
                 System.out.println("Name: " + name + "  " + String.join(", ", currLine));
@@ -76,7 +66,7 @@ public class StandardizeResultsCsv {
                     currLine.add(""); // add empty result for fx. DQ column
                 }
 
-                String column = headers.get(j);
+//                    String column = headers.get(j);
                 String value = currLine.get(j);
 //                System.out.println("Add " + column + " : " + value);
                 columnValues.add(value);
@@ -86,9 +76,9 @@ public class StandardizeResultsCsv {
             }
         }
 
-        if(filteredResults.size() > 0) {
-            // add headers
-            filteredResults.add(0, headers);
+        if(filteredResults.size() == 1) { // only headers
+            filteredResults.clear();
+            System.out.println("No member results: file can be removed");
         }
 
         return filteredResults;
@@ -117,8 +107,9 @@ public class StandardizeResultsCsv {
             return new ArrayList<List<String>>();
 //            throw new RuntimeException(errorMsg);
         }
+        Map<String, String> memberMap = memberNames.stream().collect(Collectors.toMap(Function.identity(), Function.identity()));
 
-        return FilterOnName(standardizedResultLines, memberNames);
+        return FilterOnName(standardizedResultLines, memberMap);
     }
 
     private List<String> getRecordFromLine(String line, String delimiter) {
@@ -137,31 +128,27 @@ public class StandardizeResultsCsv {
     ///  Reads csv file and standardizes columnnames
     ///  </summary>
     ///  <param name="csv"></param>
-    public final String[] ReadAndStandardize(String[] csvLines) {
+    public final List<List<String>> ReadAndStandardize(String[] csvLines) {
         ICsvHelper csvHelper = new MyCsvHelper();
-        List<Column> config = GetColumnConfiguration();
-        ColumnStandardizer columnStandardizer = new ColumnStandardizer(config);
-        String[] standardizedCsv = csvHelper.replaceHeaders(csvLines, columnStandardizer);
+        List<List<String>> standardizedCsv = csvHelper.replaceHeaders(csvLines, this.columnStandardizer);
         return standardizedCsv;
     }
 
     public final List<List<String>> ReadAndStandardize(List<List<String>> csvLines) {
         ICsvHelper csvHelper = new MyCsvHelper();
-        List<Column> config = GetColumnConfiguration();
-        ColumnStandardizer columnStandardizer = new ColumnStandardizer(config);
-        List<List<String>> standardizedCsv = csvHelper.replaceHeaders(csvLines, columnStandardizer);
+        List<List<String>> standardizedCsv = csvHelper.replaceHeaders(csvLines, this.columnStandardizer);
         return standardizedCsv;
     }
 
-    private List<Column> GetColumnConfiguration() {
-        if (null == _csvColumnConfig) {
-            ColumnsConfigParser configReader = new ColumnsConfigParser();
-            try {
-                _csvColumnConfig = configReader.parse(_csvColumnConfixXml);
-            } catch(BadConfigurationException | IOException e) {
-                System.out.printf("Configuration error: " + e.getMessage());
-            }
-        }
-        return _csvColumnConfig;
-    }
+//    private List<Column> GetColumnConfiguration() {
+////        if (null == _csvColumnConfig) {
+////            ColumnsConfigParser configReader = new ColumnsConfigParser();
+////            try {
+////                _csvColumnConfig = configReader.parse(_csvColumnConfixXml);
+////            } catch(BadConfigurationException | IOException e) {
+////                System.out.printf("Configuration error: " + e.getMessage());
+////            }
+////        }
+//        return this.columnStandardizer._columnConfig;
+//    }
 }

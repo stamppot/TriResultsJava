@@ -7,10 +7,9 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -72,7 +71,7 @@ public class StandardizeAndFilterCsvFileTest {
             String fullPath = Paths.get(resourceDirectory, filename).toString();
 
             System.out.println(filename);
-            StandardizeResultsCsv standardizer = new StandardizeResultsCsv(config, new CsvColumnValidator(filename));
+            StandardizeResultsCsv standardizer = new StandardizeResultsCsv(new CsvColumnValidator(filename), new ColumnStandardizerSql(config));
             List<List<String>> csvValues = standardizer.readAndStandardizeFromFile(fullPath, members);
 
             if(csvValues.size() > 0) {
@@ -104,8 +103,152 @@ public class StandardizeAndFilterCsvFileTest {
             } catch(IOException e) {
                 System.out.println(e.getMessage());
             }
+        }
+    }
 
+
+    @Test
+    void ReadAllAndOutputToSqlTest() {
+        String resourceDirectory = Paths.get("src","test","resources", "uitslagen").toString();
+
+        File folder = new File(resourceDirectory);
+
+        List<String> filenames = new ArrayList<>();
+
+        for(final File fileEntry : folder.listFiles((dir, name) -> name.endsWith(".csv"))) {
+            filenames.add(fileEntry.getName());
         }
 
+        TreeMap<RaceInfo,List<List<String>>> csvResults = new TreeMap<>();
+
+        CreateOutputDirectory();
+
+
+        for(String filename : filenames) {
+            String fullPath = Paths.get(resourceDirectory, filename).toString();
+
+
+            System.out.println(filename);
+            StandardizeResultsCsv standardizer = new StandardizeResultsCsv(new CsvColumnValidator(filename), new ColumnStandardizerSql(config));
+            List<List<String>> csvValues = standardizer.readAndStandardizeFromFile(fullPath, members);
+            if(csvValues.size() > 0) {
+                RaceInfo race = RaceInfo.create(filename);
+                race.setCsvValues(csvValues);
+                csvResults.put(race, csvValues);
+            }
+            else {
+                System.out.println("length: " + csvValues.size());
+            }
+//            String sqlFilename = fullPath.replace("csv", "sql");
+        }
+
+
+        Path outputDir = Paths.get(resourceDirectory).getParent().resolve("output").resolve("sql");
+        CreateOutputDirectory(outputDir);
+
+//        for(Map.Entry<String,List<List<String>>> entry : csvResults.entrySet()) {
+//            String sqlFilename = entry.getKey().replace("csv", "sql");
+//            List<List<String>> csvValues = entry.getValue();
+//            IResultsOutput sqlOutput = new SqlResultsOutput();
+//            WriteOutput(sqlOutput, outputDir, sqlFilename, csvValues);
+//        }
+
+        // output all sql to one file
+        StringBuilder sqlOutputSb = new StringBuilder();
+        for(RaceInfo race : csvResults.descendingKeySet()) {
+            race.setCsvValues(race.getCsvValues());
+            IResultsOutput sqlOutputBuilder = new SqlResultsOutput();
+            sqlOutputSb.append(sqlOutputBuilder.Generate(race));
+        }
+        String filename = DateHelper.toString(LocalDateTime.now()) + "-output.sql";
+        Path outputPath = outputDir.resolve(filename);
+        System.out.println("output path: " + outputPath);
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath.toString(), false))) {
+            writer.write(sqlOutputSb.toString());
+        } catch(IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+
+    @Test
+    void Read2018AndOutputToHtmlTest() {
+        String resourceDirectory = Paths.get("src","test","resources", "uitslagen").toString();
+
+        File folder = new File(resourceDirectory);
+
+        List<String> filenames = new ArrayList<>();
+
+        for(final File fileEntry : folder.listFiles((dir, name) -> (name.startsWith("2018") || name.startsWith("2019")) && name.endsWith(".csv"))) {
+            filenames.add(fileEntry.getName());
+        }
+
+        TreeMap<RaceInfo,List<List<String>>> csvResults = new TreeMap<>();
+
+        CreateOutputDirectory();
+
+        for(String filename : filenames) {
+            String fullPath = Paths.get(resourceDirectory, filename).toString();
+
+
+            System.out.println(filename);
+            StandardizeResultsCsv standardizer = new StandardizeResultsCsv(new CsvColumnValidator(filename), new ColumnStandardizer(config));
+            List<List<String>> csvValues = standardizer.readAndStandardizeFromFile(fullPath, members);
+            if(csvValues.size() > 0) {
+                RaceInfo race = RaceInfo.create(filename);
+                race.setCsvValues(csvValues);
+                csvResults.put(race, csvValues);
+            }
+            else {
+                System.out.println("length: " + csvValues.size() + ", filename: " + filename);
+            }
+        }
+
+
+        Path outputDir = Paths.get(resourceDirectory).getParent().resolve("output").resolve("sql");
+        CreateOutputDirectory(outputDir);
+
+        // output all sql to one file
+        StringBuilder sqlOutputSb = new StringBuilder();
+        for(RaceInfo key : csvResults.descendingKeySet()) {
+//            List<List<String>> csvValues = csvResults.get(key);
+            IResultsOutput htmlOutputBuilder = new HtmlResultsOutput();
+            sqlOutputSb.append(htmlOutputBuilder.Generate(key));
+        }
+        String filename = DateHelper.toString(LocalDateTime.now()) + "-html_output.html";
+        Path outputPath = outputDir.resolve(filename);
+        System.out.println("output path: " + outputPath);
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath.toString(), false))) {
+            writer.write(sqlOutputSb.toString());
+        } catch(IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+
+
+    private void CreateOutputDirectory() {
+        // make sure output dir exists
+        Path outputDirectory = Paths.get("src","test","resources", "output");
+        try {
+            if(!Files.exists(outputDirectory)) {
+                Files.createDirectory(outputDirectory);
+            }
+        } catch(IOException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void CreateOutputDirectory(Path dir) {
+        // make sure output dir exists
+        try {
+            if(!Files.exists(dir)) {
+                Files.createDirectory(dir);
+            }
+        } catch(IOException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 }

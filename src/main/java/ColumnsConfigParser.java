@@ -15,8 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//import TriResultsJava.Config;
-
 
 public class ColumnsConfigParser {
 
@@ -60,13 +58,14 @@ public class ColumnsConfigParser {
                 Element eElement = (Element) node;
 
                 String name = eElement.getAttribute("name");
+                String shortName = eElement.getAttribute("short");
                 Integer order = Integer.parseInt(eElement.getAttribute("order"));
 
 
                 Element mapFromNode = TriResultsJava.XMLUtils.getChild(eElement, "mapfrom");
                 List<String> altNames = TriResultsJava.XMLUtils.extractTextChildren(mapFromNode, "altname");
 
-                column = new TriResultsJava.Column(name, order, altNames);
+                column = new TriResultsJava.Column(name, shortName, order, altNames);
                 columns.add(column);
             }
         }

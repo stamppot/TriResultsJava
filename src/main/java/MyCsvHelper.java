@@ -1,9 +1,6 @@
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MyCsvHelper implements ICsvHelper {
@@ -18,44 +15,88 @@ public class MyCsvHelper implements ICsvHelper {
         return new ArrayList<String>();
     }
 
-    public final String[] replaceHeaders(String[] csvLines, ColumnStandardizer columnStandardizer) {
+    public final List<List<String>> replaceHeaders(String[] csvLines, ColumnStandardizer columnStandardizer) {
         String separator = ",";
-        String[] lines = csvLines;
-        if (lines.length > 0) {
+        List<List<String>> allLines = new ArrayList<>();
+        if (csvLines.length > 0) {
             separator = this.determineSeparator(csvLines[0]);
-            String headers = lines[0];
 
-            List<String> standardizedHeaders = columnStandardizer.GetStandardColumnNames(Arrays.asList(headers.split(separator)));
+            final String delimiter = separator;
+            allLines = Arrays.asList(csvLines).stream().map(line -> Arrays.asList(line.split(delimiter))).collect(Collectors.toList());
 
-            lines[0] = String.join(separator, standardizedHeaders);
+            replaceHeaders(allLines, columnStandardizer);
         }
 
-        return lines;
+        return allLines;
     }
 
     public final List<List<String>> replaceHeaders(List<List<String>> csvLines, ColumnStandardizer columnStandardizer) {
-        String separator = ",";
+        List<List<String>> results = new ArrayList<>();
+
         if (csvLines.size() > 0) {
             List<String> headers = csvLines.get(0);
             if(headers.get(0) == "Rank") {
                 System.out.println("Rank...");
             }
 
-            List<String> standardizedHeaders = columnStandardizer.GetStandardColumnNames(headers);
+            final TreeMap<Integer,String> standardizedHeaders = columnStandardizer.GetStandardColumnNames(headers);
 
-            int nameIndex = standardizedHeaders.indexOf("Naam");
-            if(nameIndex < 0) {
-                System.out.println("replaceHeaders: Column: Naam not found");
-                //throw new RuntimeException("Is file missing header, or column?\n" + String.join(",", headers));
 
-                standardizedHeaders = columnStandardizer.GetStandardColumnNames(headers);
+            List<Integer> allIndices = new ArrayList(headers.size());
+            for(int i=0; i<headers.size(); i++) { allIndices.add(i); }
 
+            // remove bad indices from all lines
+            List<Integer> goodIndices = allIndices.stream().filter(idx -> standardizedHeaders.containsKey(idx)).collect(Collectors.toList());
+
+            // copy
+            for(List<String> lines : csvLines.subList(0, csvLines.size())) {
+
+                List<String> filteredLine = new ArrayList<>(goodIndices.size());
+
+                for (int i = 0; i < goodIndices.size(); i++) {
+                    Integer goodIdx = goodIndices.get(i);
+                    if (goodIdx < lines.size()) {
+                        String value = lines.get(goodIdx);
+                        filteredLine.add(value);
+                    } else {
+                        String good = String.join(",", goodIndices.stream().map(idx -> idx.toString()).collect(Collectors.toList()));
+                        System.out.println("\nGood indices:  " + good + "\n Bad line: " + String.join(",", lines));
+                        i = goodIndices.size(); // skip whole line
+                    }
+                }
+
+                results.add(filteredLine);
             }
+//            for(Map.Entry<Integer,String> idxColumn : standardizedHeaders.entrySet()) {
+//                Integer index = idxColumn.getKey();
+//                String column = idxColumn.getValue();
+//            }
 
-            csvLines.set(0, standardizedHeaders);
+
+//            int nameIndex = standardizedHeaders.values().stream().collect(Collectors.toList()).indexOf("Naam");
+//            if(nameIndex < 0) {
+//                System.out.println("replaceHeaders: Column: Naam not found");
+//                //throw new RuntimeException("Is file missing header, or column?\n" + String.join(",", headers));
+//
+////                standardizedHeaders = columnStandardizer.GetStandardColumnNames(headers);
+//
+//            }
+
+            try {
+                List<String> headerValues = standardizedHeaders.values().stream().collect(Collectors.toList());
+                if(results.isEmpty()) {
+                    results.add(headerValues);
+                }
+                else {
+                    results.set(0, headerValues);
+                }
+            } catch(IndexOutOfBoundsException e) {
+                System.out.println(e.getMessage());
+            }
+//            csvLines.set(0, standardizedHeaders);
         }
 
-        return csvLines;
+        return results;
     }
 
     public final String determineSeparator(String csvHeader) {

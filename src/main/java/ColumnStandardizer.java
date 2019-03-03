@@ -8,47 +8,64 @@ import java.util.*;
 ///  </summary>
 public class ColumnStandardizer implements INameMapper {
 
-    private List<Column> _columnConfig;
+    protected List<Column> _columnConfig;
+
+    protected ColumnStandardizer() {}
 
     public ColumnStandardizer(List<Column> columnConfig) {
         this._columnConfig = columnConfig;
     }
 
-    public final List<String> GetStandardColumnNames(List<String> columnNames) {
+    public static ColumnStandardizer Create(List<Column> columnConfig, boolean useSqlSafeNames) {
+        if(useSqlSafeNames) {
+            return new ColumnStandardizerSql(columnConfig);
+        }
+        else {
+            return new ColumnStandardizer(columnConfig);
+        }
+    }
+
+    /// returns column index and name of column
+    public final TreeMap<Integer, String> GetStandardColumnNames(List<String> columnNames) {
         return this.GetStandardColumnNames(columnNames, this._columnConfig);
     }
 
-    public final List<String> GetStandardColumnNames(List<String> columnNames, List<Column> columnConfig) {
-        ArrayList<String> results = new ArrayList<String>();
+    public final TreeMap<Integer,String> GetStandardColumnNames(List<String> columnNames, List<Column> columnConfig) {
+        TreeMap<Integer,String> results = new TreeMap<>();
         Map<String,String> mapping = this.InvertColumnConfig(columnConfig);
-        for (String columnName : columnNames) {
+        for(int i=0; i < columnNames.size(); i++)  {
+            String columnName = columnNames.get(i);
             if (mapping.containsKey(columnName)) {
                 String standardizedName = mapping.get(columnName);
-                results.add(standardizedName);
+                results.put(i, standardizedName);
             }
             else {
                 System.out.println("Column name: '" + columnName + "' not supported");
-                results.add(columnName);
             }
-
         }
 
         return results;
     }
 
-    private final Map<String, String> InvertColumnConfig(List<Column> columnConfig) {
+    protected Map<String, String> InvertColumnConfig(List<Column> columnConfig) {
         Map<String,String> mapping = new HashMap<>();
         //  keys are all columns that can be mapped, including the standardized names
         for (Column col : columnConfig) {
             for (String alternativeName : col.AlternativeNames()) {
-//                if (mapping.containsKey(alternativeName)) {
-//                    throw new BadConfigurationException("Duplicate column name in configuration: {alternativeName}");
-//                }
 
-                mapping.put(alternativeName, col.getName());
+                String colName = col.getShortName();
+                if(colName == null || colName.equals("")) {
+                    colName = col.getName();
+                }
+
+                mapping.put(alternativeName, colName);
             }
 
-            mapping.put(col.getName(), col.getName());
+            String colName = col.getShortName();
+            if(colName == null || colName.equals("")) {
+                colName = col.getName();
+            }
+            mapping.put(colName, colName);
         }
 
         return mapping;

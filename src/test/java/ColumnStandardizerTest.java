@@ -3,11 +3,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -38,11 +36,11 @@ public class ColumnStandardizerTest {
     @Test
     void parseTest() {
 
-        List<String> standardizedColumns = null;
+        TreeMap<Integer,String> standardizedColumns = null;
         standardizedColumns = standardizer.GetStandardColumnNames(columnNames);
 
-        assertTrue(standardizedColumns.contains("Pos"));
-        assertFalse(standardizedColumns.contains("Plts"));
+        assertTrue(standardizedColumns.values().contains("Pos"));
+        assertFalse(standardizedColumns.values().contains("Plts"));
 
 
     }

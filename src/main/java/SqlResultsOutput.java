@@ -1,37 +1,39 @@
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SqlResultsOutput implements IResultsOutput {
 
-    public String Generate(List<List<String>> csvValues) {
+    public String Generate(RaceInfo race) {
 
         StringBuilder sb = new StringBuilder();
-//        String insertSql = "INSERT INTO Results (Pos,StartNr,Naam,Club,City,PosCat,Cat,Swim,PosSwim,T1,PosT1,PosAfterT1,Bike,PosBike,AfterBike,PosAfterBike,T2,PosT2,PosAfterT2,Run,PosRun,Run1,PosRun1,Run2,PosRun2,TeamPoints,TeamTotalPoints,TeamRank,Difference,Total,RaceDate,Race) ";
-//        sb.append(insertSql);
-//        sb.append(" VALUES (@Pos,@StartNr,@Naam,@Club,@City,@PosCat,@Cat,@Swim,@PosSwim,@T1,@PosT1,@PosAfterT1,@Bike,@PosBike,@AfterBike,@PosAfterBike,@T2,@PosT2,@PosAfterT2,@Run,@PosRun,@Run1,@PosRun1,@Run2,@PosRun2,@TeamPoints,@TeamTotalPoints,@TeamRank,@Difference,@Total,@RaceDate,@Race)";
 
-//        List<String> allColumns = Arrays.asList("Pos,StartNr,Naam,Club,City,PosCat,Cat,Swim,PosSwim,T1,PosT1,PosAfterT1,Bike,PosBike,AfterBike,PosAfterBike,T2,PosT2,PosAfterT2,Run,PosRun,Run1,PosRun1,Run2,PosRun2,TeamPoints,TeamTotalPoints,TeamRank,Difference,Total,RaceDate,Race".split(","))
-        List<String> headers = csvValues.remove(0);
+        List<List<String>> csvValues = race.getCsvValues();
 
-        for (List<String> line : csvValues) {
+        if(csvValues.size() > 0) {
+            List<String> headers = csvValues.remove(0);
 
             sb.append("INSERT INTO RaceResults (");
             sb.append(String.join(",", headers)).append(") ");
-
             sb.append("VALUES ");
 
-            sb.append("(");
-            sb.append(line.stream().map(v -> "'" + v + "'").reduce("", String::concat));
-            sb.append(");\n");
+//            sb.append(csvValues.stream().collect("", (s1,s2) -> "'" + s1 + "'" + ", " + "'" + s2 + "'", (a,b) -> a + "," + b));
 
-            for(int i = 0; i < headers.size(); i++) {
-                String value = line.get(i);
+            Stream<String> lines = csvValues.stream().map(line -> line.stream().map(v -> "'" + v + "'").collect(Collectors.joining(", ")));
 
-                sb.append("(");
-                sb.append("'" + value + "'");
-                sb.append(")");
-            }
+            String values = lines.map(l -> "(" + l + ")").collect(Collectors.joining(","));
+
+            sb.append(values);
+
+            sb.append(";\n");
+
         }
 
         return sb.toString();
-    }    
+    }
+
+//    public static String concat(String a, String b) {
+//        return "'" + a + "'" + ", " + "'" + b + "'";
+//    }
+
 }

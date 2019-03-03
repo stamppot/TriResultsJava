@@ -1,6 +1,7 @@
 import java.util.List;
+import java.util.TreeMap;
 
 public interface INameMapper {
 
-    List<String> GetStandardColumnNames(List<String> columnNames);
+    TreeMap<Integer,String> GetStandardColumnNames(List<String> columnNames);
 }

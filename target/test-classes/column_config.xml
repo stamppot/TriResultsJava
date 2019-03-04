@@ -235,7 +235,7 @@
             <altname>L1</altname>
         </mapfrom>
     </column>
-    <column     name="#Run1" short="#Run1" order="8">
+    <column     name="PosRun1" short="#Run1" order="8">
         <mapfrom>
             <altname>#Loop1</altname>
             <altname>PosRun1</altname>

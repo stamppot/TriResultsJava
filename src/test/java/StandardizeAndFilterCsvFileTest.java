@@ -115,7 +115,8 @@ public class StandardizeAndFilterCsvFileTest {
 
         List<String> filenames = new ArrayList<>();
 
-        for(final File fileEntry : folder.listFiles((dir, name) -> name.endsWith(".csv"))) {
+//        for(final File fileEntry : folder.listFiles((dir, name) -> (name.startsWith("2018") || name.startsWith("2019")) && name.endsWith(".csv"))) {
+            for(final File fileEntry : folder.listFiles((dir, name) -> name.endsWith(".csv"))) {
             filenames.add(fileEntry.getName());
         }
 
@@ -123,6 +124,7 @@ public class StandardizeAndFilterCsvFileTest {
 
         CreateOutputDirectory();
 
+        List<String> filesWithoutMembers = new ArrayList<String>();
 
         for(String filename : filenames) {
             String fullPath = Paths.get(resourceDirectory, filename).toString();
@@ -138,11 +140,17 @@ public class StandardizeAndFilterCsvFileTest {
             }
             else {
                 System.out.println("length: " + csvValues.size());
+                filesWithoutMembers.add(filename);
             }
 //            String sqlFilename = fullPath.replace("csv", "sql");
         }
 
 
+        filesWithoutMembers.sort(Comparator.naturalOrder());
+        System.out.println("Unused files:");
+        for(String f : filesWithoutMembers) {
+            System.out.println(f);
+        }
         Path outputDir = Paths.get(resourceDirectory).getParent().resolve("output").resolve("sql");
         CreateOutputDirectory(outputDir);
 
@@ -210,17 +218,17 @@ public class StandardizeAndFilterCsvFileTest {
         CreateOutputDirectory(outputDir);
 
         // output all sql to one file
-        StringBuilder sqlOutputSb = new StringBuilder();
+        StringBuilder htmlOutputSb = new StringBuilder();
         for(RaceInfo key : csvResults.descendingKeySet()) {
 //            List<List<String>> csvValues = csvResults.get(key);
             IResultsOutput htmlOutputBuilder = new HtmlResultsOutput();
-            sqlOutputSb.append(htmlOutputBuilder.Generate(key));
+            htmlOutputSb.append(htmlOutputBuilder.Generate(key));
         }
         String filename = DateHelper.toString(LocalDateTime.now()) + "-html_output.html";
         Path outputPath = outputDir.resolve(filename);
         System.out.println("output path: " + outputPath);
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath.toString(), false))) {
-            writer.write(sqlOutputSb.toString());
+            writer.write(htmlOutputSb.toString());
         } catch(IOException e) {
             System.out.println(e.getMessage());
         }

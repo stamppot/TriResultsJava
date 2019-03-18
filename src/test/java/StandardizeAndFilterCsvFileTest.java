@@ -179,6 +179,20 @@ public class StandardizeAndFilterCsvFileTest {
 
     }
 
+    @Test
+    void Read2019AndOutputToHtmlTest() {
+        String resourceDirectory = Paths.get("src", "test", "resources", "uitslagen").toString();
+
+        File folder = new File(resourceDirectory);
+
+        List<String> filenames = new ArrayList<>();
+
+        for (final File fileEntry : folder.listFiles((dir, name) -> (name.startsWith("2019")) && name.endsWith(".csv"))) {
+            filenames.add(fileEntry.getName());
+        }
+
+        ReadResultsAndOutputToHtml(resourceDirectory, filenames);
+    }
 
     @Test
     void Read2018AndOutputToHtmlTest() {
@@ -192,6 +206,52 @@ public class StandardizeAndFilterCsvFileTest {
             filenames.add(fileEntry.getName());
         }
 
+        ReadResultsAndOutputToHtml(resourceDirectory, filenames);
+//        TreeMap<RaceInfo,List<List<String>>> csvResults = new TreeMap<>();
+//
+//        CreateOutputDirectory();
+//
+//        for(String filename : filenames) {
+//            String fullPath = Paths.get(resourceDirectory, filename).toString();
+//
+//
+//            System.out.println(filename);
+//            StandardizeResultsCsv standardizer = new StandardizeResultsCsv(new CsvColumnValidator(filename), new ColumnStandardizer(config));
+//            List<List<String>> csvValues = standardizer.readAndStandardizeFromFile(fullPath, members);
+//            if(csvValues.size() > 0) {
+//                RaceInfo race = RaceInfo.create(filename);
+//                race.setCsvValues(csvValues);
+//                csvResults.put(race, csvValues);
+//            }
+//            else {
+//                System.out.println("length: " + csvValues.size() + ", filename: " + filename);
+//            }
+//        }
+//
+//
+//        Path outputDir = Paths.get(resourceDirectory).getParent().resolve("output").resolve("sql");
+//        CreateOutputDirectory(outputDir);
+//
+//        // output all sql to one file
+//        StringBuilder htmlOutputSb = new StringBuilder();
+//        for(RaceInfo key : csvResults.descendingKeySet()) {
+////            List<List<String>> csvValues = csvResults.get(key);
+//            IResultsOutput htmlOutputBuilder = new HtmlResultsOutput();
+//            htmlOutputSb.append(htmlOutputBuilder.Generate(key));
+//        }
+//        String filename = DateHelper.toString(LocalDateTime.now()) + "-html_output.html";
+//        Path outputPath = outputDir.resolve(filename);
+//        System.out.println("output path: " + outputPath);
+//        try(BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath.toString(), false))) {
+//            writer.write(htmlOutputSb.toString());
+//        } catch(IOException e) {
+//            System.out.println(e.getMessage());
+//        }
+
+    }
+
+
+    private void ReadResultsAndOutputToHtml(String resourceDirectory, List<String> filenames) {
         TreeMap<RaceInfo,List<List<String>>> csvResults = new TreeMap<>();
 
         CreateOutputDirectory();
@@ -232,10 +292,7 @@ public class StandardizeAndFilterCsvFileTest {
         } catch(IOException e) {
             System.out.println(e.getMessage());
         }
-
     }
-
-
 
     private void CreateOutputDirectory() {
         // make sure output dir exists

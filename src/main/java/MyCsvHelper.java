@@ -88,6 +88,13 @@ public class MyCsvHelper implements ICsvHelper {
                     results.add(headerValues);
                 }
                 else {
+
+                    int columnSize = headerValues.size();
+                    int distinctSize = Arrays.asList(headerValues.stream().distinct()).size();
+                    if(columnSize > distinctSize) {
+                        ;
+                    }
+
                     results.set(0, headerValues);
                 }
             } catch(IndexOutOfBoundsException e) {

@@ -1,4 +1,4 @@
-Pos,StNr,Naam,Geboortejaar,Club,Nationality,Total,Swim,Bike,AftBike,Run,Totaal,PosSwim,PosBike,PosSwimBike,PosRun,PosTotal,race,date
+Pos,StNr,Naam,Geboortejaar,Club,Nationality,Total,Swim,Bike,AftBike,Run,TotaleTijd,PosSwim,PosBike,PosSwimBike,PosRun,PositionTotal,race,date
 1,609,Christian Haupt,1980,Hannover 96,GER-NIE,04:03:27,00:29:36,2:15:51,2:45:27,1:17:59,4:03:27,12,1,1,2,1,NordSeeman 2014,2014-08-10
 2,680,Achim Groenhagen,1968,1. TCO Die Bären Oldenburg,GER-NIE,04:06:27,00:31:41,2:18:41,2:50:22,1:16:04,4:06:27,22,2,2,1,2,NordSeeman 2014,2014-08-10
 3,670,Folkert Behrends,1966,ACADEMY MOVE-MENT,ESP,04:11:39,00:29:27,2:21:05,2:50:33,1:21:06,4:11:39,9,3,3,3,3,NordSeeman 2014,2014-08-10

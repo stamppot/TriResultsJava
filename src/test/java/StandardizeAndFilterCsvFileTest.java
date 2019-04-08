@@ -193,7 +193,7 @@ public class StandardizeAndFilterCsvFileTest {
 
         ReadResultsAndOutputToHtml(resourceDirectory, filenames);
     }
-
+    
     @Test
     void Read2018AndOutputToHtmlTest() {
         String resourceDirectory = Paths.get("src","test","resources", "uitslagen").toString();
